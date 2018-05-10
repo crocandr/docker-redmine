@@ -1,0 +1,38 @@
+version: '3'
+
+services:
+  db:
+    image: mysql:5.7
+    environment:
+      - MYSQL_ROOT_PASSWORD=SuperSecret
+      - MYSQL_DATABASE=redmine
+      - MYSQL_USER=redmine
+      - MYSQL_PASSWORD=redmine
+      - LC_ALL=C.UTF-8
+    volumes:
+      - './db/data:/var/lib/mysql'
+      - '/etc/localtime:/etc/localtime:ro'
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    restart: always
+  redmine:
+    image: redmine
+    environment:
+      - REDMINE_DB_MYSQL=db
+      - REDMINE_DB_DATABASE=redmine
+      - REDMINE_DB_USERNAME=redmine
+      - REDMINE_DB_PASSWORD=redmine
+      - REDMINE_DB_ENCODING=utf8
+      - LC_ALL=C.UTF-8
+    volumes:
+      - './config/configuration.yml:/usr/src/redmine/config/configuration.yml'
+      - './files:/usr/src/redmine/files'
+      - './plugins:/usr/src/redmine/plugins'
+      - './log:/usr/src/redmine/log'
+      - './repo-cache:/repo-cache'
+      - '/etc/localtime:/etc/localtime:ro'
+    ports:
+      - '3000:3000'
+    depends_on:
+      - db
+    restart: always
+

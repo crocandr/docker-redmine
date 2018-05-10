@@ -1,0 +1,8 @@
+default:
+  email_delivery:
+    delivery_method: :smtp
+    smtp_settings:
+      enable_starttls_auto: false
+      address: "127.0.0.1"
+      port: 25
+
